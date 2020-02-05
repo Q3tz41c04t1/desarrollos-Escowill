@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="transfer_pkg_line_view_form" model="ir.ui.view">
+            <field name="name">transfer.pkg.line.view.form</field>
+            <field name="model">transfer.pkg.line</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <group>
+                            <field name="tranfer_wizard_id" readonly="1"/>
+                            <field name="location_id" string="Location" readonly="1" force_save="1"/>
+                            <field name="total_packages" string="Total de cajas" force_save="1" readonly="1"/>
+                            <field name="allow_mover" string="Allow Mover?"/>
+                            <field name="packages_to_move"  attrs="{'readonly': [('allow_mover', '=', False)]}" string="Cajas a mover"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="transfer_pkg_line_view_tree" model="ir.ui.view">
+            <field name="name">transfer.pkg.line.view.tree</field>
+            <field name="model">transfer.pkg.line</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="tranfer_wizard_id"/>
+                    <field name="location_id" string="Location"/>
+                    <field name="total_packages" string="Total de cajas"/>
+                    <field name="allow_mover" string="Allow Mover?"/>
+                    <field name="packages_to_move" string="Cajas a mover"/>
+                </tree>
+            </field>
+        </record>
+
+
+        <record id="transfer_package_wizard_view_form" model="ir.ui.view">
+            <field name="name">transfer.package.wizard.view.form</field>
+            <field name="model">transfer.package.wizard</field>
+            <field name="arch" type="xml">
+                <form>
+                    <script>
+                        $(document).ready(function(){
+                            $('.modal-dialog').css({'width': '700px'});
+                        });
+                    </script>
+                    <field name="scanned_type" invisible="1"/>
+                    <field name="mode" invisible="1"/>
+                    <div attrs="{'invisible': [('scanned_type', '=', 'package')]}">
+                        <center>
+                            <h4><field name="warn_msg" readonly="1"/></h4>
+                        </center>
+                    </div>
+                    <group attrs="{'invisible': ['|', ('scanned_type', '=', 'product'), ('mode', '!=', 'stock_delivery')]}">
+                        <field name="packages_list" invisible="1"/>
+                        <field name="packages_quant" invisible="1"/>
+                        <field name="sale_id" invisible="1"/>
+                        <field name="st_product_id" string="Producto" readonly="1"/>
+                        <field name="sale_order_id" string="N de pedido a entregar" attrs="{'required': [('mode', '=', 'stock_delivery')]}"/>
+                        <field name="st_partner_id" string="Cliente" attrs="{'required': [('mode', '=', 'stock_delivery')]}"/>
+                    </group>
+                    <div attrs="{'invisible': ['|', ('scanned_type', '=', 'product'), ('mode', '!=', 'stock_delivery')]}">
+                        <label for="boxes_in_order" string="Cantidad de cajas en el pedido"/>
+                        <field name="boxes_in_order" readonly="1" force_save="1"/><br/>
+                        <label for="boxes_delivered" string="Cantidad de cajas entregadas"/>
+                        <field name="boxes_delivered" readonly="1" force_save="1"/><br/>
+                        <label for="boxes_pending" string="Pendientes por entrega"/>
+                        <field name="boxes_pending" readonly="1" force_save="1"/><br/><br/>
+                    </div>
+                    <group attrs="{'invisible': ['|', ('scanned_type', '=', 'product'), ('mode', '=', 'stock_delivery')]}">
+                        
+                        <field name="product_id" string="Producto" readonly="1" attrs="{'required': [('mode', '=', 'internal_transfer')]}"/>
+                        <field name="partner_id" string="Pertenece al cliente" readonly="1" attrs="{'required': [('mode', '=', 'internal_transfer')]}"/>
+                        <field name="user_id" string="Agente comercial" readonly="1"/>
+                        <field name="total_packages" string="Total de cajas" readonly="1"/>
+                    </group>
+
+                    <br/><br/><h4 attrs="{'invisible': [('scanned_type', '=', 'product')]}">Distribuido en las siguientes ubicacions</h4><br/>
+
+                    <field name="tranfer_line_ids" attrs="{'invisible': [('scanned_type', '=', 'product')]}">
+                        <tree create="false" delete="false" editable="bottom">
+                            <field name="location_id" readonly="1" force_save="1"/>
+                            <field name="total_packages" style="text-align:center;" force_save="1" readonly="1"/>
+                            <field name="allow_mover"/>
+                            <field name="packages_to_move" attrs="{'readonly': [('allow_mover', '=', False)]}"/>
+                        </tree>
+                    </field>
+                    <center attrs="{'invisible': ['|', ('scanned_type', '=', 'product'), ('mode', 'in', ['stock_delivery', 'delivery_on_request'])]}">
+                        <group class="col-7">
+                            <field name="location_id" string="Ubicacion Destino:" attrs="{'required': [('mode', '=', 'internal_transfer')]}"/>
+                        </group>
+                    </center>
+                    <footer>
+                        <center>
+                            <button name="transfer_packages" string="Transfer"
+                            type="object" class="oe_highlight" attrs="{'invisible': [('scanned_type', '=', 'product')]}"/> &#x2063;
+                            <button string="Cancel" class="oe_link oe_highlight" special="cancel" />
+                        </center>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="action_transfer_wizard">
+            <field name="name">Transferencia Interna</field>
+            <field name="res_model">transfer.package.wizard</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+    </data>
+</odoo>

@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- stock.picking form view -->
+        <record id="view_picking_form_view_inh" model="ir.ui.view">
+            <field name="name">stock.picking.view.form</field>
+            <field name="model">stock.picking</field>
+            <field name="inherit_id" ref="stock.view_picking_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='backorder_id']" position="after">
+                    <field name="production_id" invisible="1"/>
+                    <field name="comm_agent_id" string='Sale Commercial Agent'/>
+                    <field name="machine" string="Machine"/>
+                    <field name="is_delivery" invisible="1"/>
+                    <field name="from_custom_barcode" invisible="1"/>
+                </xpath>
+            </field>
+        </record>
+
+        <!-- stock.picking kanban view -->
+        <record id="stock_picking_kanban_view_inh" model="ir.ui.view">
+            <field name="name">stock.picking.view.kanaban</field>
+            <field name="model">stock.picking</field>
+            <field name="inherit_id" ref="stock.stock_picking_kanban"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='date']" position="after">
+                    <field name="machine"/>
+                </xpath>
+                <xpath expr="//div[hasclass('o_kanban_record_bottom')]" position="after">
+                    <t t-if="record.machine.value">
+                        <b>Machine: </b><t t-esc="record.machine.value"/>
+                    </t>
+                </xpath>
+            </field>
+        </record>
+
+        <!-- stock.picking search view -->
+        <record id="stock_picking_search_view_inh" model="ir.ui.view">
+            <field name="name">stock.picking.view.search</field>
+            <field name="model">stock.picking</field>
+            <field name="inherit_id" ref="stock.view_picking_internal_search"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='name']" position="after">
+                    <field name="active"/>
+                    <field name="from_custom_barcode" invisible="1"/>
+                </xpath>
+                <xpath expr="//filter[@name='activities_upcoming_all']" position="after">
+                    <separator/>
+                    <filter string="Archive" name="archive_record" domain="[('active', '=', False)]"/>
+                    <filter string="Active" name="active_record" domain="[('active', '=', True)]"/>
+                </xpath>
+
+                <xpath expr="//group" position="inside">
+                    <filter name="archive_active" string="Archive/Active" context="{'group_by': 'active'}"/>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

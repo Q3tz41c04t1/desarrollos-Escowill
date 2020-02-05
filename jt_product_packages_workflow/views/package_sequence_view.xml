@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="package_sequence_view_form" model="ir.ui.view">
+            <field name="name">package.sequence.form.view</field>
+            <field name="model">package.sequence</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <group>
+                            <field name="sale_id"/>
+                            <field name="sale_line_id"/>
+                            <field name="manufacturing_order_id"/>
+                            <field name="sequence"/>
+                            <field name="complete_name"/>
+                            <field name="package_name"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="package_sequence_view_tree" model="ir.ui.view">
+            <field name="name">package.sequence.tree.view</field>
+            <field name="model">package.sequence</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="sale_id"/>
+                    <field name="sale_line_id"/>
+                    <field name="manufacturing_order_id"/>
+                    <field name="sequence"/>
+                    <field name="complete_name"/>
+                    <field name="package_name"/>
+                </tree>
+            </field>
+        </record>
+
+
+        <record id="action_mrp_sequences" model="ir.actions.act_window">
+            <field name="name">MRP Sequences</field>
+            <field name="res_model">package.sequence</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <menuitem 
+            name="MRP Sequences"
+            id="menu_mrp_sequences"
+            parent="base.menu_custom"
+            action="action_mrp_sequences"/>
+    </data>
+</odoo>

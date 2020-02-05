@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <template id="backend_assets" inherit_id="web.assets_backend" name="Backend Asset">
+            <xpath expr=".">
+
+                <!-- Javascript file added -->
+                <script type="text/javascript" src="/jt_product_packages_workflow/static/src/js/abstract_client_action.js"></script>
+
+                <!-- Style file added -->
+                <link rel="stylesheet" href="/jt_product_packages_workflow/static/src/css/style.css"/>
+
+            </xpath>
+        </template>
+    </data>
+</odoo>

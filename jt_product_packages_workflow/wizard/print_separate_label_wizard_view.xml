@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="print_separate_label_wizard_view_form" model="ir.ui.view">
+            <field name="name">print.separate.label.wizard.view.form</field>
+            <field name="model">print.separate.label.wizard</field>
+            <field name="arch" type="xml">
+                <form>
+                    <group states="choose">
+                        <field name="state" invisible="1"/>
+                        <group>
+                            <field name="labels" widget="many2many_tags" string="Labels" required="1" attrs="{'invisible': [('report1', '!=', False)]}"/>
+                        </group>
+                        <button class="oe_highlight" width="150px" string="Preview Labels" type="object" name="get_report" attrs="{'invisible': [('report1', '!=', False)]}"/><br/>
+                    </group>
+                    <field name="report1" filename="name" nolabel="1" widget="pdf_viewer" attrs="{'invisible': ['|', ('report1', '=', False), ('state', '=', 'get')]}"/>
+                    <div states="get">
+                        <group>
+                            <field name="name" colspan="4" invisible="1"/>
+                            <field name="report" filename="name" colspan="4"/>
+                        </group>
+                    </div>
+                    <footer>
+                        <button name="print_report" string="Print Labels"
+                            type="object" class="oe_highlight" states="choose"/>
+                        <span states="choose"> Or </span>
+                        <button string="Cancel" class="oe_link oe_highlight" special="cancel" />
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="action_print_separate_label">
+            <field name="name">Print Separately</field>
+            <field name="res_model">print.separate.label.wizard</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+    </data>
+</odoo>

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="assign_commercial_agent_view_form" model="ir.ui.view">
+            <field name="name">assign.commercial.agent.view.form</field>
+            <field name="model">assign.commercial.agent</field>
+            <field name="arch" type="xml">
+                <form>
+                    <group>
+                        <field name="user_id" string="Commercial Agent"/>
+                    </group>
+                    <footer>
+                        <button name="assign_agent" string="Print Labels"
+                            type="object" class="oe_highlight"/>
+                        <span> Or </span>
+                        <button string="Cancel" class="oe_link oe_highlight" special="cancel" />
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <act_window name="Change Commercial Agent"
+            res_model="assign.commercial.agent"
+            src_model="stock.quant" 
+            view_mode="form"
+            target="new"
+            multi="True"
+            id="change_agent_action"/>
+    </data>
+</odoo>

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="barcode_deliver_product_wizard_view_form" model="ir.ui.view">
+            <field name="name">barcode.deliver.products.wizard.view.form</field>
+            <field name="model">barcode.deliver.products.wizard</field>
+            <field name="arch" type="xml">
+                <form>
+                    <script>
+                        $(document).ready(function(){
+                            $('.modal-dialog').css({'width': '550px'});
+                        });
+                    </script>
+                    <p>
+                        <field name="message" style="font-size:18px;" readonly="1" nolabel="1"/>
+                    </p><br/>
+                    <group>
+                        <field name="packages_to_validate" string="Cajas"/>
+                    </group>
+                    <footer>
+                        <center>
+                            <button name="fill_packages" string="Transfer"
+                            type="object" class="oe_highlight"/> &#x2063;
+                            <button string="Cancel" class="oe_link oe_highlight" special="cancel" />
+                        </center>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="action_open_barcode_deliver_wizard">
+            <field name="name">Create Partial Delivery?</field>
+            <field name="res_model">barcode.deliver.products.wizard</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+    </data>
+</odoo>    

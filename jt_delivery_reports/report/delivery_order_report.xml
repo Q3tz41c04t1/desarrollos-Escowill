@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <template id="delivery_order_report_template">
+            <t t-call="web.html_container">
+                <t t-call="web.external_layout">
+                    <!-- Add report details in tabular format -->
+                    <t t-if="'customer' in env.context and 'order_id' in env.context and 'date' in env.context">
+                        <table class="table" style="width: 60%">
+                            <tr>
+                                <th>Cliente:</th>
+                                <th>Vendedora</th>
+                                <th>Orden</th>
+                                <th>Fecha</th>
+                            </tr>
+                            <tr>
+                                <td><t t-esc="env.context.get('customer').display_name"/></td>
+                                <td><t t-esc="env.context.get('order_id').user_id.display_name"/></td>
+                                <td><t t-esc="env.context.get('order_id').name"/></td>
+                                <td><t t-esc="env.context.get('date')"/></td>
+                            </tr>
+                         </table>
+                    </t>
+
+                    <!-- Main area to print product lines -->
+                    <table class="table table-sm">
+                        <thead>
+                            <tr class="table-sm mt64">
+                                <th style="width: 29%"><strong>Producto</strong></th>
+                                <th style="width: 14%"><strong>Total de Cajas</strong></th>
+                                <th style="width: 14%"><strong>Piezas Por Caja</strong></th>
+                                <th style="width: 14%"><strong>Cantidad de Piezas</strong></th>
+                                <th style="width: 14%"><strong>Ubicacion Origen</strong></th>
+                                <th style="width: 14%"><strong>Referencia</strong></th>
+                            </tr>
+                        </thead>
+                        <!-- Labels for table columns -->
+                        <tbody>
+                            <t t-foreach="docs" t-as="o">
+                                <t t-foreach="o.move_ids_without_package" t-as="move">
+                                    <t t-set="total_pkg" t-value="0.0"/>
+                                    <t t-set="pkg_qty" t-value="0.0"/>
+                                    <t t-set="total_qty" t-value="0.0"/>
+
+                                    <!-- MOve Line Loop To Calculate total pkgs, total qty, qty per package -->
+                                    <t t-foreach="move.move_line_ids" t-as="line">
+                                        <t t-if="line.package_id or line.result_package_id">
+                                            <t t-set="total_pkg" t-value="total_pkg + 1"/>
+                                            <t t-set="pkg_qty" t-value="line.qty_done"/>
+                                            <t t-set="total_qty" t-value="total_qty + line.qty_done"/>
+                                        </t>
+                                    </t>
+                                    <div class="page">
+                                        <tr>
+                                            <td><span><t t-esc="move.product_id.display_name"/></span></td>
+                                            <td><span><t t-esc="total_pkg"/></span></td>
+                                            <td><span><t t-esc="pkg_qty"/></span></td>
+                                            <td><span><t t-esc="total_qty"/></span></td>
+                                            <td><span><t t-esc="move.location_id.display_name"/></span></td>
+                                            <td><span><t t-esc="o.name"/></span></td>
+                                        </tr>
+                                    </div>
+                                </t>
+                            </t>
+                        </tbody>
+                    </table>
+                </t>
+            </t>
+        </template>
+
+        <!-- Report paper format -->
+        <record id="delivery_order_report_paperformat" model="report.paperformat">
+            <field name="name">Paperformat Delivery Order Report</field>
+            <field name="default" eval="True"/>
+            <field name="format">A4</field>
+            <field name="page_height">0</field>
+            <field name="page_width">0</field>
+            <field name="orientation">Landscape</field>
+            <field name="margin_top">47</field>
+            <field name="margin_bottom">20</field>
+            <field name="margin_left">7</field>
+            <field name="margin_right">7</field>
+            <field name="header_line" eval="False"/>
+            <field name="header_spacing">45</field>
+            <field name="dpi">90</field>
+        </record>
+
+        <!-- Report -->
+        <report 
+            id="delivery_order_report"
+            model="stock.picking"
+            string="Package Delivery Order Report"
+            report_type="qweb-pdf"
+            name="jt_delivery_reports.delivery_order_report_template"
+            file="jt_delivery_reports.delivery_order_report_template"
+            print_report_name="object.name"
+            paperformat="jt_delivery_reports.delivery_order_report_paperformat"
+            menu="False"
+        />
+    </data>
+</odoo>

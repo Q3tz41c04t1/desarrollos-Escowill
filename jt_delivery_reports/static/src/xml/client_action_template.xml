@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="dt_main_menu_report">
+        <style type="text/css">
+            #section_2{
+                display: none;
+            }
+            .button_back{
+                display: none;
+            }
+        </style>
+        <div class="o_stock_barcode_main_menu_container o_home_menu_background">
+            <div class="o_stock_barcode_main_menu position-relative">
+                <a href="#" class="o_stock_barcode_menu_1 d-block float-left"><i class="fa fa-chevron-left"></i></a>
+                <div id="section_1">
+                    <h1 class="mb-4">¿Qué deseas imprimir?</h1>
+                    <div style="margin-top: 50px;">
+                        <h2> <button class="btn btn-link button_report_d_order">ORDEN DE ENTREGA</button> </h2><br/>
+                        <h2> <button class="btn btn-link button_report_int_tra">TRANSFERENCIA INTERNA</button> </h2><br/>
+                    </div>
+                </div>
+                <hr class="mb-4 d-none d-sm-block"/>
+                <div>
+                    <center>
+                        <button class="button_close btn oe_link oe_highlight" special="cancel">Cancel</button>
+                    </center>
+                </div>
+            </div>
+        </div>
+    </t>
+</templates>

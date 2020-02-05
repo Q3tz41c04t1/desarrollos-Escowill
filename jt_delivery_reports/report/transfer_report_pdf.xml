@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <template id="int_transfer_order_report_template">
+            <t t-call="web.html_container">
+                <t t-call="web.external_layout">
+                    <!-- Main area to print product lines -->
+                    <table class="table table-sm">
+                        <thead>
+                            <tr class="table-sm mt64">
+                                <th style="width: 23%"><strong>Producto</strong></th>
+                                <th style="width: 11%"><strong>Total de Cajas</strong></th>
+                                <th style="width: 11%"><strong>Piezas Por Caja</strong></th>
+                                <th style="width: 11%"><strong>Cantidad de Piezas</strong></th>
+                                <th style="width: 11%"><strong>Ubicacion Origen</strong></th>
+                                <th style="width: 11%"><strong>Ubicacion Destino</strong></th>
+                                <th style="width: 11%"><strong>Referencia</strong></th>
+                                <th style="width: 11%"><strong>Cliente</strong></th>
+                            </tr>
+                        </thead>
+                        <!-- Labels for table columns -->
+                        <tbody>
+                            <t t-foreach="docs" t-as="o">
+                                <!-- <t t-set="mv" t-value=""/> -->
+                                <t t-set="total_pkg" t-value="0.0"/>
+                                <t t-set="pkg_qty" t-value="0.0"/>
+                                <t t-set="total_qty" t-value="0.0"/>
+
+                                <!-- MOve Line Loop To Calculate total pkgs, total qty, qty per package -->
+                                <t t-foreach="o.move_line_ids" t-as="line">
+                                    <t t-if="line.package_id or line.result_package_id">
+                                        <t t-set="total_pkg" t-value="total_pkg + 1"/>
+                                        <t t-set="pkg_qty" t-value="line.qty_done"/>
+                                        <t t-set="total_qty" t-value="total_qty + line.qty_done"/>
+                                    </t>
+                                </t>
+                                <div class="page">
+                                    <tr>
+                                        <td><span><span t-field="o.product_id.display_name"/></span></td>
+                                        <td><span><t t-esc="total_pkg"/></span></td>
+                                        <td><span><t t-esc="pkg_qty"/></span></td>
+                                        <td><span><t t-esc="total_qty"/></span></td>
+                                        <td><span><t t-esc="o.location_id.display_name"/></span></td>
+                                        <td><span><t t-esc="o.location_dest_id.display_name"/></span></td>
+                                        <td><span><t t-esc="o.reference"/></span></td>
+                                        <td><span><t t-esc="o.picking_id.partner_id.display_name"/></span></td>
+                                    </tr>
+                                </div>
+                            </t>
+                        </tbody>
+                    </table>
+                </t>
+            </t>
+        </template>
+
+        <!-- Report paper format -->
+        <record id="int_transfer_order_report_paperformat" model="report.paperformat">
+            <field name="name">Paperformat Internal Transfer Report</field>
+            <field name="default" eval="True"/>
+            <field name="format">A4</field>
+            <field name="page_height">0</field>
+            <field name="page_width">0</field>
+            <field name="orientation">Landscape</field>
+            <field name="margin_top">47</field>
+            <field name="margin_bottom">20</field>
+            <field name="margin_left">7</field>
+            <field name="margin_right">7</field>
+            <field name="header_line" eval="False"/>
+            <field name="header_spacing">45</field>
+            <field name="dpi">90</field>
+        </record>
+
+        <!-- Report -->
+        <report 
+            id="int_transfer_order_report"
+            model="stock.move"
+            string="Internal Transfers Report"
+            report_type="qweb-pdf"
+            name="jt_delivery_reports.int_transfer_order_report_template"
+            file="jt_delivery_reports.int_transfer_order_report_template"
+            print_report_name="object.name"
+            paperformat="jt_delivery_reports.int_transfer_order_report_paperformat"
+            menu="False"
+        />
+    </data>
+</odoo>

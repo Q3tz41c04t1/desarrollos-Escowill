@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- Inherited Stock Barcode JS templates file, To remove ADD PRODUCT button for stock.picking orders -->
+<templates id="stock_barcode.template" xml:space="preserve">
+    <t t-extend="stock_barcode_lines_widget">
+        <t t-jquery='.o_add_line' t-operation='replace'>
+            <button t-if="widget.model != 'stock.picking'" class="btn btn-secondary text-uppercase o_add_line"><i class="fa fa-plus mr-1"/> Add product</button>
+        </t>
+    </t>
+</templates>

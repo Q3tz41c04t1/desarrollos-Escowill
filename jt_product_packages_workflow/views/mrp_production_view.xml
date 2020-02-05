@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="mrp_production_view_form" model="ir.ui.view">
+            <field name="name">mrp.production.form.view</field>
+            <field name="model">mrp.production</field>
+            <field name="inherit_id" ref="mrp.mrp_production_form_view"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='origin']" position="after">
+                    <field name="sale_id" string="Sale Order" attrs="{'invisible': [('sale_id', '=', False)]}" readonly="1"/>
+                    <field name="sale_line_id" string="Sale Order Line" attrs="{'invisible': [('sale_line_id', '=', False)]}" readonly="1"/>
+                    <field name="total_packages" string="Total Packages" attrs="{'invisible': [('sale_line_id', '=', False)]}" readonly="1"/>
+                    <field name="todo_packages" attrs="{'invisible': ['|', ('sale_line_id', '=', False), ('todo_packages', '=', 0)]}" readonly="1"/>
+                    <field name="next_package" attrs="{'invisible': ['|', ('sale_line_id', '=', False), ('todo_packages', '=', 0)]}" readonly="1"/>
+                    <field name="todo_pack_packages" attrs="{'invisible': ['|', ('sale_line_id', '=', False), ('todo_pack_packages', '=', 0)]}" readonly="1"/>
+                    <field name="next_pack_package" attrs="{'invisible': ['|', ('sale_line_id', '=', False), ('todo_pack_packages', '=', 0)]}" readonly="1"/>
+                    <field name="flag_done_production" invisible="1"/>
+                    <field name="flag_package_stage" invisible="1"/>
+                    <field name="flag_pack_package_stage" invisible="1"/>
+                    <field name="flag_done_pack_order" invisible="1"/>
+                </xpath>
+                <xpath expr="//field[@name='routing_id']"  position="after">
+                    <field name="turno" string="Turno"/>
+                    <field name="maquina" string="Maquina"/>
+                    <field name="comm_partner_id" string="Propietario" readonly="1"/>
+                    <field name="comm_agent_id" string="Commercial Agent"/>
+                </xpath>
+
+                <xpath expr="//header/button[@name='button_mark_done'][1]" position="attributes">
+                    <attribute name="string">Finish Production</attribute>
+                </xpath>
+
+                <xpath expr="//header/button[@name='button_mark_done'][1]" position="after">
+                    <button name="close_picking_set_owner" string="Create Pack Packages " attrs="{'invisible': ['|', ('state', '!=', 'done'), '|',('flag_done_production', '=', True), '|', ('flag_package_stage', '=', 'done'), '|', ('flag_done_pack_order', '=', True), ('todo_packages', '!=', 0)]}" type="object" class="oe_highlight"/>
+                    <!-- <button name="close_picking_set_owner" string="Close Production" attrs="{'invisible': ['|', ('state', '!=', 'done'), '|',('flag_done_production', '=', True), '|', ('flag_package_stage', '=', 'done'), ('todo_packages', '!=', 0)]}" type="object" class="oe_highlight"/> -->
+                </xpath>
+
+                <xpath expr="//header/button[@name='button_mark_done'][1]" position="attributes">
+                    <attribute name="string">Finish Production</attribute>
+                </xpath>
+
+                <xpath expr="//header/button[@name='button_mark_done'][1]" position="after">
+                    <button name="create_packages" string="Create Pick Packages" attrs="{'invisible': ['|', ('state', '!=', 'done'), '|', ('flag_done_production', '=', True), '|', ('flag_package_stage', '=', 'done'), ('todo_packages', '=', 0)]}" type="object" class="oe_highlight"/>
+
+                    <button name="validate_packages" string="Validate Pick Packages" attrs="{'invisible': ['|', ('state', '!=', 'done'), '|', ('flag_done_production', '=', True), ('flag_package_stage', '=', 'create')]}" type="object" class="oe_highlight"/>
+                </xpath>
+            </field>
+        </record>
+
+        <act_window id="action_print_separate_label" 
+            name="Print Separately" 
+            res_model="print.separate.label.wizard" 
+            src_model="mrp.production" 
+            view_mode="form"
+            target="new"
+            multi="False" />
+    </data>
+</odoo>

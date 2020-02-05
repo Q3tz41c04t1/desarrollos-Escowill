@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="del_rep_wiz_view_form" model="ir.ui.view">
+            <field name="name">del.rep.wiz.view.form</field>
+            <field name="model">del.rep.wiz</field>
+            <field name="arch" type="xml">
+                <form>
+                    <script>
+                        $(document).ready(function(){
+                            $('.modal-dialog').css({'width': '700px'});
+                        });
+                    </script>
+                    <center>
+                        <field name="state" invisible="1"/>
+                        <group states="choose">
+                            <field name="date" string="Fecha de entrega: " required="1"/>
+                            <field name="partner_id"  string="Cliente: " attrs="{'readonly': [('date', '=', False)]}" required="1" options="{'no_create_edit': True, 'no_create': True, 'no_edit': True}"/>
+                            <field name="order_id" options="{'no_create_edit': True, 'no_create': True, 'no_edit': True}" string="N de pedido entregado: " attrs="{'readonly': ['|', ('partner_id', '=', False), ('date', '=', False)]}" required="1"/>
+                        </group>
+                        <group states="get">
+                            <field name="name" colspan="4" invisible="1"/>
+                            <field name="report" filename="name" colspan="4"/>
+                        </group>
+                    </center>
+                    <footer>
+                        <center>
+                            <button name="generate_order_report" string="IIMPRIMIR"
+                            type="object" class="oe_highlight" states="choose"/> &#x2063;
+                            <button string="Cancel" class="oe_link oe_highlight" special="cancel" />
+                        </center>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="action_delivery_order_report">
+            <field name="name">Delivery Order Report</field>
+            <field name="res_model">del.rep.wiz</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+    </data>
+</odoo>
+       

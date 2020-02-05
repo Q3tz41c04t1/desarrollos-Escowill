@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Action to be call on menu click -->
+        <record id="action_delivery_report" model="ir.actions.client">
+            <field name="name">Ordenes de entrega y transferencias</field>
+            <field name="tag">delivery_reports_main_menu</field>
+            <field name="target">fullscreen</field>
+        </record>
+
+        <!-- Root menu for app "internal transfer and delivery" -->
+        <menuitem
+            id="delivery_report_menu"
+            action="action_delivery_report"
+            icon="fa-barcode"
+            groups="stock.group_stock_user" />
+    </data>
+</odoo>

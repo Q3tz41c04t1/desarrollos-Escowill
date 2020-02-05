@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <template id="package_label_report_template">
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="o">
+                    <t t-call="web.basic_layout">
+                        <center>
+                        <link rel="stylesheet" href="/jt_product_packages_workflow/static/src/css/style.css"/>
+
+                            <!-- To check MO created from sale order or not -->
+                            <t t-if="o.sale_id">
+
+                                <t t-set="sequences" t-value="o.get_sequences()"/>
+
+                                <t t-set="labels" t-value="0"/>
+                                <t t-if="env.context.get('labels')">
+                                    <t t-set="labels" t-value="env.context.get('labels')"/>
+                                </t>
+                                <t t-if="labels != 0">
+                                    <t t-if="all(elem in sequences for elem in labels)">
+                                        <t t-set="sequences" t-value="labels"/>
+                                    </t>
+                                </t>
+
+                                <t t-foreach="sequences" t-as="sequence">
+                                    <div class="page">
+                                        <div id="pkg_main">
+                                            <div id="pkg_div_1">
+                                                <div class="sec_1_div1">
+                                                    <div class="sub_1">
+                                                        <div class="sub_1_1">
+                                                            <img t-attf-src="data:image/png;base64,{{res_company.logo}}"/>
+                                                        </div>
+                                                        <div class="sub_1_2 text-uppercase text-left">
+                                                            <div class="sub_1_2_1">
+                                                                <span>o.c. cliente</span><br/>
+                                                                <span style="font-weight: bold; font-size: 15px;"><t t-esc="o.sale_id.customer_po"/></span>
+                                                            </div>
+                                                            <div class="sub_1_2_2">
+                                                                <span>clave cliente</span><br/>
+                                                                <span style="font-weight: bold; font-size: 15px;"><t t-esc="o.sale_line_id.customer_key"/></span>
+                                                            </div>
+                                                            <div class="sub_1_2_3" style="border-bottom: none;">
+                                                                <span >LOTE &#160; &#160;</span><br/>
+                                                                <span style="font-weight: bold; font-size: 15px;"><t t-esc="o.name"/></span>
+                                                            </div>
+                                                        </div>
+                                                        <div style="clear: both;"/>
+                                                    </div>
+                                                    <t t-set="barcodee" t-value="str(o.name.replace('/', '') + sequence).replace('-', '')"/>
+                                                    <div class="text-uppercase sub_2">
+                                                        <img style="padding-top: 10px;
+                                                         padding-bottom: 10px;height: 80%;    width: 100%;" alt="barcode" t-att-src="'/report/barcode/?type=%s&amp;value=%s&amp;width=%s&amp;height=%s' % ('Code128', barcodee, 600, 120)"/><br/>
+                                                        <span style="font-weight: bold;"><t t-esc="barcodee"/></span><br/>
+                                                        <!-- <span>LOTE &#160; &#160; &#160; &#160; &#160; &#160; CAJA</span> -->
+                                                    </div>
+                                                </div>
+                                                <div style="clear: both;"/>
+                                                <div class="sec_1_div2 text-uppercase text-left">
+                                                    <span class="sec_1_div2_span1">
+                                                        <div style="height: 50%; width: 100%; color: black; padding-left: 10px; border: 1px solid black;">
+                                                            <t t-esc="o.sale_line_id.name"/><br/>
+                                                        </div>
+                                                        <div style="height: 50%; width: 100%; background: black; padding-left: 10px;">
+                                                            <t t-esc="o.product_id.display_name"/> &#160;
+                                                            <t t-if="o.product_id.weight">
+                                                                <t t-esc="o.product_id.weight"/>kg
+                                                            </t>
+                                                        </div>
+                                                    </span><br/>
+                                                </div>
+                                            </div>
+                                            <div id="pkg_div_2">
+                                                <div class="sec_2_div1 text-uppercase text-left">
+                                                    <div class="sec_2_div1_1">
+                                                        <span>cliente - customer</span><br/>
+                                                        <span style="font-weight: bold; font-size: 17px;"><t t-esc="o.sale_id.partner_id.display_name"/></span>
+                                                    </div>
+                                                    <div class="sec_2_div1_2">
+                                                        <span>ventas - sales</span><br/>
+                                                        <span style="font-weight: bold; font-size: 17px;">
+                                                            <t t-if="o.sale_id.user_id" t-esc="o.sale_id.user_id.name"/>
+                                                        </span>
+                                                    </div>
+                                                    <div class="sec_2_div1_3">
+                                                        <div class="sec_2_div1_3_1 text-center">
+                                                            <span style="font-weight: bold; font-size: 68px;">
+                                                                <t t-if="o.maquina" t-esc="o.maquina"/>
+                                                            </span>
+                                                        </div>
+                                                        <div class="sec_2_div1_3_2 text-center">
+                                                            <span style="font-weight: bold; font-size: 55px;">
+                                                                <t t-if="o.sale_line_id.product_packaging" t-esc="o.sale_line_id.product_packaging.qty" t-options='{"widget": "float", "decimal_precision": "Product Unit of Measure"}'/>
+                                                            </span>
+                                                           <span style="padding-top: 10px !important;">contenido - PZ</span>
+                                                       </div>
+                                                        <div style="clear:both;"/>
+                                                    </div>
+                                                </div>
+                                                <div class="sec_2_div2 text-uppercase text-left">
+                                                    <div class="sec_2_div2_1">
+                                                        <span>fecha - date</span><br/>
+                                                    </div>
+                                                    <div class="sec_2_div2_2">
+                                                        <span>operador - worker</span><br/>
+                                                    </div>
+                                                    <div class="sec_2_div2_3">
+                                                        <span>turno - shift</span><br/>
+                                                    </div>
+                                                    <div class="sec_2_div2_4 text-center" style="padding-left: 0;">
+                                                        <span style="font-weight: bold; font-size: 45px;">
+                                                            <t t-esc="sequence"/>
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                                <div style="clear: both;"/>
+                                            </div>
+                                            <div id="ftr_style">
+                                                <div class="ftr_style_1 text-uppercase">
+                                                    <span>hecho en mexico - made in mexico</span>
+                                                </div>
+                                                <div class="ftr_style_2">
+                                                    <span>www.escowill.com.mx</span>
+                                                </div>
+                                                <div style="clear: both;"/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </t>
+                            </t>
+                            <t t-else="">
+                                <h3>This MO is not related to sale order</h3>
+                            </t>
+                        </center>
+                    </t>
+                </t>
+            </t>
+        </template>
+
+        <!-- Report paper format -->
+        <record id="package_label_report_paperformat" model="report.paperformat">
+            <field name="name">Package Label Report PaperFormat</field>
+            <field name="default" eval="True"/>
+            <field name="format">custom</field>
+            <field name="page_height">103</field> <!-- 389.29 -->
+            <field name="page_width">127</field> <!-- 480 -->
+            <field name="orientation">Portrait</field>
+            <field name="margin_top">2</field>
+            <field name="margin_bottom">0</field>
+            <field name="margin_left">0</field>
+            <field name="margin_right">0</field>
+            <field name="header_line" eval="False"/>
+            <field name="header_spacing">0</field>
+            <field name="dpi">100</field>
+        </record>
+
+        <!-- Report -->
+        <report
+            id="package_label_report"
+            model="mrp.production"
+            string="Label Printing"
+            report_type="qweb-pdf"
+            name="jt_product_packages_workflow.package_label_report_template"
+            file="jt_product_packages_workflow.package_label_report_template"
+            print_report_name="object.name"
+            paperformat="jt_product_packages_workflow.package_label_report_paperformat"
+        />
+    </data>
+</odoo>

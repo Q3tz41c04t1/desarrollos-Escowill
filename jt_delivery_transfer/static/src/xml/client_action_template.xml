@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<templates xml:space="preserve">
+
+    <t t-name="dt_main_menu">
+        <style type="text/css">
+            #section_2{
+                display: none;
+            }
+            .button_back{
+                display: none;
+            }
+        </style>
+
+        <div class="o_stock_barcode_main_menu_container o_home_menu_background">
+            <div class="o_stock_barcode_main_menu position-relative">
+                <a href="#" class="o_stock_barcode_menu_1 d-block float-left"><i class="fa fa-chevron-left"></i></a>
+
+                <div id="section_1">
+                    <h1 class="mb-4">What do you want to do?</h1>
+
+                    <div style="margin-top: 50px;">
+                        <h2> <button class="btn btn-link button_int_transfer">TRANSFERENCIA INTERNA</button> </h2><br/>
+                        <h2> <button class="btn btn-link button_stock_delivery">ENTREGA DE STOCK</button> </h2><br/>
+                        <h2> <button class="btn btn-link button_delivery_on_request">ENTREGA DE BAJO PEDIDO</button> </h2><br/>
+                    </div>
+
+                </div>
+
+                <div id="section_2">
+                    <h1 class="mb-4">Barcode Scanning</h1>
+
+                    <div class="o_stock_barcode_container position-relative d-inline-block mt-4 mb-5">
+                        <img src="/stock_barcode/static/img/barcode.png" alt="Barcode" class="img-fluid mb-1 mt-1"/>
+                        <span class="o_stock_barcode_laser"/>
+                    </div>
+
+                    <h2 class="section_2_3">Escanea el codigo de barras de la caja</h2><br/>
+                </div>              
+
+                <hr class="mb-4 d-none d-sm-block"/>
+
+                <div>
+                    <center>
+                        <button class="button_back btn btn-primary">Go Back</button>
+                        <button class="button_close btn oe_link oe_highlight" special="cancel">Cancel</button>
+                    </center>
+                </div>
+            </div>
+        </div>
+    </t>
+
+</templates>
